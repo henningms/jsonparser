@@ -1,43 +1,25 @@
 package no.henning.jsonparser.casting;
 
+import no.henning.jsonparser.casting.interfaces.Caster;
+
 public class CasterImpl
 {
+	private static Casters casters = new Casters();
+	
+	public static Object cast(Class desiredValueClass, Object value)
+	{
+		Caster<?> casterImplementation = casters.get(desiredValueClass);
+		
+		return casterImplementation.cast(value);
+	}
+	
 	public static Double castToDouble(Object value)
 	{
-		Double result = 0.0;
-
-		if (value == null)
-			throw new IllegalArgumentException("Value can not be null");
-
-		try
-		{
-			if (value instanceof String)
-			{
-				result = Double.parseDouble((String) value);
-			}
-			else if (value instanceof Number)
-			{
-				result = ((Number) value).doubleValue();
-			}
-			else if (value instanceof Character)
-			{
-				String stringValue = value.toString();
-				result = Double.parseDouble(stringValue);
-			}
-			else
-			{
-				throw new IllegalArgumentException(
-						"Value can not be converted from type "
-								+ value.getClass().getSimpleName());
-			}
-		}
-		catch (NumberFormatException numberFormatException)
-		{
-			throw new IllegalArgumentException("Value is not a valid number",
-					numberFormatException);
-		}
-		
-		
-		return result;
+		return (Double) cast(Double.class, value);
+	}
+	
+	public static String castToString(Object value)
+	{
+		return "";
 	}
 }

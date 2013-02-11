@@ -1,22 +1,26 @@
 package no.henning.jsonparser.test;
 
+import org.junit.*;
 import static org.junit.Assert.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import no.henning.jsonparser.casting.implementations.DoubleCasterImpl;
 
-import no.henning.jsonparser.casting.CasterImpl;
-
-import org.junit.Test;
-
-public class CasterTests
+public class DoubleCasterTests
 {
-
+	private DoubleCasterImpl caster;
+	
+	@Before
+	public void setUp()
+	{
+		caster = new DoubleCasterImpl();
+	}
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void castToDouble_ValueIsNull_ThrowIllegalArgumentException()
 	{
 		// Act
-		Double actual = CasterImpl.castToDouble(null);
+		Double actual = caster.cast(null);
 	}
 	
 	@Test
@@ -27,19 +31,29 @@ public class CasterTests
 		String value = "5";
 		
 		// Act
-		Double actual = CasterImpl.castToDouble(value);
+		Double actual = caster.cast(value);
 		
 		// Assert
 		assertEquals(expected, actual);
 	}
 	
 	@Test
+	public void cast_StringValueIsValidNumberOfTwentyFiveOFifteen_ReturnsTwentyFiveOFifteen()
+	{
+		Double expected = 25.15;
+		String value = "25.15";
+		
+		Double actual = caster.cast(value);
+		
+		assertEquals(expected, actual);
+	}
+	@Test
 	public void castToDouble_StringValueIsValidNegativNumber_ReturnsTheNumber()
 	{
 		Double expected = -100.0;
 		String value = "-100";
 		
-		Double actual = CasterImpl.castToDouble(value);
+		Double actual = caster.cast(value);
 		
 		assertEquals(expected, actual);
 	}
@@ -48,7 +62,7 @@ public class CasterTests
 	public void castToDouble_StringValueIsInvalid_ThrowIllegalArgumentException()
 	{
 		// Act
-		Double result = CasterImpl.castToDouble("#45.45-7-2&%&");
+		Double result = caster.cast("#45.45-7-2&%&");
 	}
 	
 	@Test
@@ -59,7 +73,7 @@ public class CasterTests
 		Number value = 5;
 		
 		// Act
-		Double actual = CasterImpl.castToDouble(value);
+		Double actual = caster.cast(value);
 		
 		assertEquals(expected, actual);
 	}
@@ -69,7 +83,7 @@ public class CasterTests
 	{
 		Double expected = Double.POSITIVE_INFINITY * 2;
 		
-		Double actual = CasterImpl.castToDouble(expected);
+		Double actual = caster.cast(expected);
 		
 		assertEquals(expected, actual);
 	}
@@ -79,7 +93,7 @@ public class CasterTests
 	{
 		List<String> objects = new ArrayList<String>();
 		
-		Double actual = CasterImpl.castToDouble(objects);
+		Double actual = caster.cast(objects);
 	}
 	
 	@Test
@@ -88,7 +102,7 @@ public class CasterTests
 		Double expected = 5.0;
 		Character value = '5';
 		
-		Double actual = CasterImpl.castToDouble(value);
+		Double actual = caster.cast(value);
 		
 		assertEquals(expected, actual);
 	}
@@ -98,7 +112,7 @@ public class CasterTests
 	{
 		Character value = '$';
 		
-		Double actual = CasterImpl.castToDouble(value);
+		Double actual = caster.cast(value);
 	}
 
 }
